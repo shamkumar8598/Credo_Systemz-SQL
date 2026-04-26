@@ -1,0 +1,118 @@
+/* Q1. Select all columns from the students table. 
+
+SELECT *
+FROM students;
+
+/* Q2. Find students with marks greater than 80. 
+
+SELECT *
+FROM students
+WHERE marks > 80;
+
+/* Q3. Sort students by marks in descending order. 
+
+ SELECT *
+ FROM students
+ ORDER BY marks DESC;
+
+/* Q4. Count how many students are there. 
+
+SELECT COUNT(*)
+From students;
+
+/* Q5. Get the highest marks from the table. 
+
+SELECT *,MAX(marks) 
+FROM students;
+
+/* Q6. Select only unique ages. 
+
+SELECT DISTINCT age
+FROM students;
+
+/* Q7. Show names of students aged between 18 and 19. 
+
+SELECT *
+FROM students
+Where age BETWEEN 18 AND 19;
+
+/* Q8. Find students whose names start with 'S'. 
+
+SELECT *
+FROM students
+WHERE student_name LIKE 'S%'
+
+/* Q9. Get the average marks grouped by age. 
+
+SELECT *,AVG(marks)
+FROM students
+GROUP BY age;
+
+/* Q10. Filter groups where average marks > 70. 
+
+SELECT *,Round(AVG(marks)) AS AVG_MARKS
+FROM students
+GROUP by marks
+HAVING AVG(marks)>70;
+
+/* Q11. Select top 2 scoring students. 
+
+SELECT *
+FROM students
+ORDER BY marks DESC
+LIMIT 2;
+
+/* Q12. Find students with no marks below 60. 
+
+SELECT *
+FROM students
+WHERE marks is null;
+
+/* Q13. Update Rahul’s marks to 75. 
+
+UPDATE students
+SET marks = 75
+WHERE student_name = 'Rahul';
+
+/* Q14. Delete students with marks < 60. 
+
+DELETE FROM students
+WHERE marks < 60;
+
+/* Q15. Select students who are NOT 19 years old. 
+
+SELECT *
+FROM students
+WHERE age!=19;
+
+/* Q16. Subquery – Get students with above average marks. 
+
+SELECT * 
+FROM students
+WHERE marks > (SELECT AVG(marks)
+               FROM students);
+
+/* Q17. Which clause is used to filter before aggregation? 
+
+Where is used before aggregation
+
+
+/* Q18. How to rename column in output? 
+
+In MYSQL output column is renamed using AS is called as Aliasing
+
+
+/* Q19. What is the result of: SELECT COUNT(DISTINCT age) FROM students; 
+
+Select COUNT(DISTICT age)
+3
+
+/* Q20. Find names of students whose names end with 'a'. 
+
+SELECT *
+FROM students
+WHERE student_name LIKE '%a';
+
+
+
+
