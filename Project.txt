@@ -1,0 +1,243 @@
+
+🧩 1. DDL – Create Database and Tables
+Q1. Create customers, orders, and products tables with proper keys and data types.
+
+Create database Project;
+
+CUSTOMER TABLE
+CREATE TABLE CUSTOMER(
+    Customer_id INT,
+    Name Varchar(50),
+    City Varchar(50))
+
+ORDERS
+CREATE TABLE ORDERS(
+    order_id INT,
+    customer_id INT,
+    order_date Date,
+    total_amount int)
+
+PRODUCTS
+CREATE TABLE Products(
+product_id Varchar(50),
+    name Varchar(50),
+    category Varchar(50),
+    price INT);
+
+
+🧩 2. DML – Data Manipulation
+Q2. Insert 5 records into each table.
+
+INSERT INTO customer VALUES
+(1, 'Rajesh', 'Chennai'),
+(2, 'Priya', 'Mumbai'),
+(3, 'Arjun', 'Delhi'),
+(4, 'Sneha', 'Chennai');
+
+INSERT INTO orders VALUES
+(101, 1, '2025-01-10', 2500),
+(102, 2, '2025-01-12', 4000),
+(103, 3, '2025-01-15', 1500),
+(104, 1, '2025-02-05', 3200),
+(105, 4, '2025-02-20', 1800),
+(106, 2, '2025-03-01', 220);
+
+INSERT INTO products VALUE
+('P01',"Laptop","Electronics", 70000),
+('P02', "Phone","Electronics", 30000),
+('P03',"Shoes","Fashion", 4000),
+('P04' ,"Watch", "Fashion", 6000);
+
+Q3. Update a customer’s city to “Hyderabad”.
+
+UPDATE customer
+SET City= "Hyderabad"
+WHERE customer_id=4;
+
+Q4. Delete orders where total_amount < 2000.
+
+DELETE FROM orders
+WHERE total_amount<2000;
+
+🧩 3. DQL – Simple SELECT Queries
+
+Q5. Display all customer names and cities.
+
+SELECT Name,City
+FROM customer;
+
+Q6. Show all orders placed in February 2025.
+
+SELECT *
+FROM Orders
+WHERE MONTH(order_date) = 2
+AND YEAR(order_date) = 2025;
+
+Q7. Find all customers from Chennai.
+SELECT *
+FROM customer
+WHERE city="Chennai";
+
+
+🧩 4. WHERE, BETWEEN, LIKE, IN
+
+-- Q8. Retrieve all orders where total_amount is between 2000 and 4000.
+
+SELECT *
+FROM orders
+WHERE total_amount BETWEEN 2000 AND 4000;
+
+-- Q9. Display all customers whose names start with “P”.
+
+SELECT *
+FROM customer 
+WHERE name LIKE 'P%';
+
+-- Q10. Find customers who live in Mumbai or Delhi.
+
+SELECT *
+FROM Customer
+WHERE City = 'Mumbai' OR 'Delhi';
+
+-- Q11. Show orders sorted by order_date (most recent first).
+
+SELECT *
+FROM orders
+order by order_date DESC
+
+-- Q12. Display customers sorted alphabetically by name.
+
+SELECT *
+FROM customer
+ORDER BY name 
+
+🧩 6. GROUP BY + Aggregate Functions
+
+-- Q13. Find total sales per customer.
+
+SELECT customer_id,SUM(total_amount) as total_sale
+FROM orders
+Group by  customer_id;
+
+-- Q14. Find total sales per city.
+
+SELECT city,sum(total_amount)
+From customer as C 
+LEFT join orders as O
+ON C.Customer_id=O.customer_id
+GROUP BY C.City
+
+
+-- Q15. Find average, minimum, and maximum order amount across all orders.
+
+SELECT Round(AVG(total_amount),2) AS Average,MIN(total_amount) AS Minimum,MAX(total_amount) AS Maximum
+FROM orders
+
+🧩 7. HAVING Clause
+
+-- Q16. Find customers whose total purchase value is greater than ₹3000.
+
+SELECT customer_id, SUM(total_amount) AS Total_purchase
+FROM orders
+GROUP BY customer_id
+HAVING Total_purchase>3000;
+
+-- Q17. Find cities with total sales greater than ₹5000.
+
+SELECT city,sum(total_amount) AS Total_salse
+From customer as C 
+LEFT join orders as O
+ON C.Customer_id=O.customer_id
+GROUP BY C.City
+HAVING Total_salse>5000
+
+🧩 8. JOINS (INNER, LEFT, RIGHT)
+
+-- Q18. Display each order along with the customer name and city.
+
+SELECT C.name,C.city,O.order_id,O.customer_id
+FROM Orders AS O
+LEFT JOIN customer AS C
+ON O.customer_id=C.Customer_id
+
+-- Q19. Find customers who have not placed any orders.
+
+SELECT C.name,C.City
+FROM customer C
+LEFT JOIN orders O 
+ON C.customer_id = O.customer_id
+WHERE O.order_id IS NULL;
+
+-- Q20. Join orders and products to display order_id, product name, price (assume order_products table links them)
+
+SELECT O.order_id, P.product_name, P.price
+FROM Orders AS O
+JOIN order_products AS OP
+ON O.order_id = OP.order_id
+JOIN Products AS P
+ ON OP.product_id = P.product_id;
+
+
+🧩 9. Aggregate + Join (Analyst Scenario)
+
+
+-- Q21. Show each city’s total revenue and number of unique customers.
+
+SELECT c.city,SUM(o.total_amount) AS total_revenue,
+COUNT(DISTINCT c.customer_id) AS unique_customers
+FROM customer c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.city;
+
+-- Q22. Find the top 3 customers by total order value.
+
+SELECT c.name, SUM(o.total_amount) AS total
+FROM customer c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.name
+ORDER BY total DESC
+LIMIT 3;
+
+🧩 10. Window Functions (Analytical Queries)
+
+-- Q23. Rank customers by total purchase amount. 
+
+SELECT c.name,
+SUM(o.total_amount) AS total,
+RANK() OVER (ORDER BY SUM(o.total_amount) DESC) AS rank
+FROM customer c
+JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.name
+ORDER BY rank ;
+
+-- Q24. Calculate a running total of sales ordered by date. 
+SELECT order_date,SUM(total_amount) OVER (ORDER BY order_date) AS running_total
+FROM orders;
+
+
+-- Q25. Find the monthly average order amount and show each order’s deviation from that average.
+SELECT order_id, order_date, total_amount,
+ AVG(total_amount) OVER (
+        PARTITION BY YEAR(order_date), MONTH(order_date)) AS monthly_avg,
+total_amount - AVG(total_amount) OVER (
+        PARTITION BY YEAR(order_date), MONTH(order_date)) AS deviation
+FROM Orders;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
